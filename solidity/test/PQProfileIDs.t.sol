@@ -117,9 +117,41 @@ contract PQProfileIDsTest is Test {
         h.check(PQProfileIDs.PROFILE_HYBRID, stark);
     }
 
-    function testUnconfiguredSlot_IsNoOp() public view {
-        // address(0) ⇒ no policyId fetch ⇒ allow.
+    function testStrictPQ_RefusesZeroAddress() public {
+        // Red HIGH cluster #2/#5/#8: under strict-PQ a zero verifier slot
+        // is NOT a silent no-op. The old early-return-on-zero let admin
+        // (or compromised key) flip strict-PQ + verifier=0 to disable the
+        // gate while keeping the profile bytes32 "set". Now we refuse.
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OnlyStrictPQ.VerifierUnsetUnderStrictPQ.selector,
+                PQProfileIDs.PROFILE_QUASAR_STRICT_PQ
+            )
+        );
         h.check(PQProfileIDs.PROFILE_QUASAR_STRICT_PQ, IPolicyId(address(0)));
+    }
+
+    function testClassicalCompat_AllowsZeroAddress() public view {
+        // Classical-compat: gate is a no-op, zero slot is admissible
+        // (the classical L1 EVM counterparty is itself classical).
+        h.check(PQProfileIDs.PROFILE_CLASSICAL_COMPAT, IPolicyId(address(0)));
+    }
+
+    function testStrictPQ_RefusesSpoofedPolicy() public {
+        // Allow-list (not deny-list): a verifier returning an unrecognised
+        // bytes32 — neither classical nor PQ — is refused. The old deny-
+        // list would let any unknown id pass; the new allow-list closes
+        // that gap (Red HIGH cluster #2 attack vector: spoofed policyId).
+        bytes32 bogus = keccak256("ProofPolicyBogusUnknown");
+        MockPolicy spoofed = new MockPolicy(bogus);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OnlyStrictPQ.VerifierRefusedUnderStrictPQ.selector,
+                PQProfileIDs.PROFILE_QUASAR_STRICT_PQ,
+                bogus
+            )
+        );
+        h.check(PQProfileIDs.PROFILE_QUASAR_STRICT_PQ, spoofed);
     }
 
     function testModifierForm_AllowsAndRefuses() public {
