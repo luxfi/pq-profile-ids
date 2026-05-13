@@ -1,0 +1,30 @@
+{
+  "name": "@luxfi/pq-profile-ids",
+  "version": "0.1.0",
+  "description": "Canonical PQ profile and proof-policy identifiers for Lux. Solidity surface (PQProfileIDs library + OnlyStrictPQ modifier).",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luxfi/pq-profile-ids.git"
+  },
+  "homepage": "https://github.com/luxfi/pq-profile-ids",
+  "bugs": {
+    "url": "https://github.com/luxfi/pq-profile-ids/issues"
+  },
+  "author": "Lux Industries Inc <dev@lux.network>",
+  "main": "src/index.sol",
+  "files": [
+    "src/**/*.sol",
+    "README.md",
+    "KAT.md"
+  ],
+  "keywords": [
+    "lux",
+    "post-quantum",
+    "strict-pq",
+    "policy-gate",
+    "solidity",
+    "go",
+    "typescript"
+  ]
+}

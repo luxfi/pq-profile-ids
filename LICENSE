@@ -1,0 +1,9 @@
+@luxfi/p3q-evm is dual-licensed under either:
+
+  * MIT License (see `LICENSE-MIT`)
+  * Apache License, Version 2.0 (see `LICENSE-APACHE`)
+
+at your option. SPDX identifier: `MIT OR Apache-2.0`.
+
+This matches the dual-license posture of the parent Rust workspace at
+https://github.com/luxfi/p3q and of upstream Plonky3.

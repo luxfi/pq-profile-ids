@@ -1,0 +1,11 @@
+node_modules/
+dist/
+out/
+cache/
+broadcast/
+ts/dist/
+solidity/lib/
+solidity/out/
+solidity/cache/
+go/coverage.out
+.DS_Store
